@@ -1,0 +1,16 @@
+<mainScreen>:
+    b: btn
+    l: lbl
+    cols: 2
+    Button:
+        id: btn
+        text: "Press me."
+        on_press: root.kill()
+    Label:
+        id: lbl
+        text: root.label_text
+    BoxLayout:
+        size_hint: 0.1, 0.1
+        Image:
+            source: root.img
+            pos: 100, 100
