@@ -7,6 +7,10 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 Builder.load_string('''
 <Label>:
     font_size: 50
+    color: 1, 0, 1, 1
+<Button>:
+    color: 1, 0, 0, 1
+    background_color: 0, 1, 0, 1
 <Screen1>:
     name: 'first'
     GridLayout:
@@ -15,8 +19,7 @@ Builder.load_string('''
             text: root.name
         Button:
             text: 'Go to second'
-            on_press: 
-                root.manager.current = 'second'
+            on_press: root.manager.current = 'second'
         BoxLayout:
             orientation: 'vertical'
             FloatLayout:
@@ -28,11 +31,11 @@ Builder.load_string('''
                     font_size: self.height/2
                     on_text: root.change_the_color()
             Scatter:
-                pos: 100, 100
                 Label:
+                    pos: self.width/2, self.height/2
                     id: label1
                     text: input_written.text
-
+                    color: 0.5, 0.5, 0.5, 1
 <Screen2>:
     name: 'second'
     GridLayout:
@@ -44,8 +47,7 @@ Builder.load_string('''
             on_press: 
                 root.manager.current = 'first'
 
-'''
-)
+''')
 
 
 class Screen1(Screen):
@@ -62,8 +64,8 @@ class Screen2(Screen):
 class TutorialApp(App):
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(Screen1(name='first'))
-        sm.add_widget(Screen2(name='second'))
+        sm.add_widget(Screen1())
+        sm.add_widget(Screen2())
         return sm
 
 
