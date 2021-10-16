@@ -1,10 +1,11 @@
 from random import random
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen, ScreenManager
 
-
-Builder.load_string('''
+a = '''
 <Label>:
     font_size: 150
 <ScatterWidget>:
@@ -23,7 +24,39 @@ Builder.load_string('''
             Label:
                 id: label1
                 text: input_written.text
-''')
+'''
+b = '''
+<Screen1>:
+    name: 'first'
+    GridLayout:
+        cols: 2
+        Label:
+            text: root.name
+        Button:
+            text: 'Go to second'
+            on_press: 
+                root.manager.current = 'second'
+<Screen2>:
+    name: 'second'
+    GridLayout:
+        rows: 2
+        Label:
+            text: root.name
+        Button:
+            text: 'Go to first'
+            on_press: 
+                root.manager.current = 'first'
+
+'''
+Builder.load_string(b)
+
+
+class Screen1(Screen):
+    pass
+
+
+class Screen2(Screen):
+    pass
 
 
 class ScatterWidget(BoxLayout):
@@ -35,7 +68,10 @@ class ScatterWidget(BoxLayout):
 
 class TutorialApp(App):
     def build(self):
-        return ScatterWidget()
+        sm = ScreenManager()
+        sm.add_widget(Screen1(name='first'))
+        sm.add_widget(Screen2(name='second'))
+        return sm
 
 
 TutorialApp().run()
