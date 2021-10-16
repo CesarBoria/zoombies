@@ -3,6 +3,7 @@ from random import random
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.properties import ListProperty
 
 Builder.load_string('''
 <Label>:
@@ -35,10 +36,11 @@ Builder.load_string('''
                     pos: self.width/2, self.height/2
                     id: label1
                     text: input_written.text
-                    color: 0.5, 0.5, 0.5, 1
+                    color: root.text_color
         Label:
             id: label2
             text: input_written.text[:3]
+            color: root.text_color
 <Screen2>:
     name: 'second'
     GridLayout:
@@ -54,13 +56,15 @@ Builder.load_string('''
 
 
 class Screen1(Screen):
+    text_color = ListProperty([1, 0, 0, 1])
 
     def change_the_color(self, *args):
-        label = self.ids.label1
-        label.color = [random() for _ in range(3)] + [1]
-        label2 = self.ids.label2
-        label2.color = [random() for _ in range(3)] + [1]
-        print(label.text)
+        self.text_color = [random() for _ in range(3)] + [1]
+        # label = self.ids.label1
+        # label.color = self.color
+        # label2 = self.ids.label2
+        # label2.color = self.color
+        # print(label.text)
 
 
 class Screen2(Screen):
