@@ -28,7 +28,7 @@ Builder.load_string('''
 
 class ScatterWidget(BoxLayout):
     def change_the_color(self, *args):
-        label = self.ids['label1']
+        label = self.ids.label1
         label.color = [random() for _ in range(3)] + [1]
         print(label.text)
 
