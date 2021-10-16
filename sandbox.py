@@ -36,6 +36,9 @@ Builder.load_string('''
                     id: label1
                     text: input_written.text
                     color: 0.5, 0.5, 0.5, 1
+        Label:
+            id: label2
+            text: input_written.text[:3]
 <Screen2>:
     name: 'second'
     GridLayout:
@@ -51,9 +54,12 @@ Builder.load_string('''
 
 
 class Screen1(Screen):
+
     def change_the_color(self, *args):
         label = self.ids.label1
         label.color = [random() for _ in range(3)] + [1]
+        label2 = self.ids.label2
+        label2.color = [random() for _ in range(3)] + [1]
         print(label.text)
 
 
