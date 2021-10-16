@@ -3,7 +3,8 @@ from random import random
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import ListProperty
+from kivy.properties import ListProperty, NumericProperty
+from kivy.graphics import Rectangle
 
 Builder.load_string('''
 <Label>:
@@ -45,13 +46,28 @@ Builder.load_string('''
     name: 'second'
     GridLayout:
         rows: 2
+        cols: 2
         Label:
             text: root.name
         Button:
             text: 'Go to first'
             on_press: 
                 root.manager.current = 'first'
-
+        Button:
+            text: 'Move!'
+            on_press: root.move_the_circle()
+        BoxLayout:
+            canvas:
+                Color: 
+                    rgba: 0, 0, 1, 1
+                Rectangle:
+                    pos: self.width, 0
+                    size: self.width, self.height
+                Color:
+                    rgba: 1, 0, 0, 1
+                Ellipse:
+                    pos: self.width + root.x, 10 + root.y
+                    size: 100, 100
 ''')
 
 
@@ -60,15 +76,15 @@ class Screen1(Screen):
 
     def change_the_color(self, *args):
         self.text_color = [random() for _ in range(3)] + [1]
-        # label = self.ids.label1
-        # label.color = self.color
-        # label2 = self.ids.label2
-        # label2.color = self.color
-        # print(label.text)
 
 
 class Screen2(Screen):
-    pass
+    x = NumericProperty(0)
+    y = NumericProperty(10)
+
+    def move_the_circle(self, *args):
+        self.x += 10
+        self.y += 10
 
 
 class TutorialApp(App):
