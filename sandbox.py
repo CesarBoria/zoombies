@@ -1,12 +1,19 @@
 from random import random
 
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ListProperty, NumericProperty
-from kivy.graphics import Rectangle
+from kivy.uix.widget import Widget
 
 Builder.load_string('''
+<Ball>:
+    size: 100, 100
+    canvas:
+        Ellipse:
+            pos: self.width + root.x, 10 + root.y
+            size: self.size
 <Label>:
     font_size: 50
     color: 1, 0, 1, 1
@@ -65,10 +72,17 @@ Builder.load_string('''
                     size: self.width, self.height
                 Color:
                     rgba: 1, 0, 0, 1
-                Ellipse:
-                    pos: self.width + root.x, 10 + root.y
-                    size: 100, 100
+        Ball:
 ''')
+
+
+class Ball(Widget):
+    x = NumericProperty(0)
+    y = NumericProperty(10)
+
+    def on_touch_down(self, touch):
+        self.x += 10
+        self.y += 10
 
 
 class Screen1(Screen):
