@@ -4,14 +4,17 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import ListProperty, NumericProperty
+from kivy.properties import ListProperty, NumericProperty, ObjectProperty
 from kivy.uix.widget import Widget
+from kivy.graphics import Rectangle
 
 Builder.load_string('''
 <Ball>:
+    # x_b: x_b_kv
     size: 100, 100
     canvas:
         Ellipse:
+            # pos: x_b_kv, 10 + root.y
             pos: self.width + root.x, 10 + root.y
             size: self.size
 <Label>:
@@ -62,7 +65,7 @@ Builder.load_string('''
                 root.manager.current = 'first'
         Button:
             text: 'Move!'
-            on_press: root.move_the_circle()
+            # on_press: root.move_the_circle()
         BoxLayout:
             canvas:
                 Color: 
@@ -77,28 +80,38 @@ Builder.load_string('''
 
 
 class Ball(Widget):
-    x = NumericProperty(0)
-    y = NumericProperty(10)
+    x_b = ObjectProperty(0)
+    y_b = NumericProperty(10)
 
-    def on_touch_down(self, touch):
-        self.x += 10
-        self.y += 10
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.s = [10, 10]
+        with self.canvas:
+            # Rectangle(pos=(0, 0), size=self.size)
+            self.r = Rectangle(pos=(10, 10), size=self.s)
+        self.velocity = [4, 2]
+        self.velocity_b = [4, 2]
+        Clock.schedule_interval(self.update, 1/60)
+
+    def update(self, dt):
+        x, y = self.r.pos
+        if x + self.s[0] > self.width or x < 0:
+            self.velocity[0] *= -1
+        if y + self.s[0] > self.height or y < 0:
+            self.velocity[1] *= -1
+        self.r.pos = (x + self.velocity[0], y + self.velocity[1])
+    # pass
 
 
 class Screen1(Screen):
     text_color = ListProperty([1, 0, 0, 1])
 
-    def change_the_color(self, *args):
+    def change_the_color(self):
         self.text_color = [random() for _ in range(3)] + [1]
 
 
 class Screen2(Screen):
-    x = NumericProperty(0)
-    y = NumericProperty(10)
-
-    def move_the_circle(self, *args):
-        self.x += 10
-        self.y += 10
+    pass
 
 
 class TutorialApp(App):
