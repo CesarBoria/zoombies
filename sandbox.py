@@ -10,12 +10,10 @@ from kivy.graphics import Rectangle
 
 Builder.load_string('''
 <Ball>:
-    # x_b: x_b_kv
     size: 100, 100
     canvas:
         Ellipse:
-            # pos: x_b_kv, 10 + root.y
-            pos: self.width + root.x, 10 + root.y
+            pos: root.x_b, root.y_b
             size: self.size
 <Label>:
     font_size: 50
@@ -57,6 +55,12 @@ Builder.load_string('''
     GridLayout:
         rows: 2
         cols: 2
+        canvas:
+            Color: 
+                rgba: 1, 0, 0, 1        
+            Rectangle:
+                pos: self.pos
+                size: self.size
         Label:
             text: root.name
         Button:
@@ -75,23 +79,24 @@ Builder.load_string('''
                     size: self.width, self.height
                 Color:
                     rgba: 1, 0, 0, 1
+            
         Ball:
 ''')
 
 
 class Ball(Widget):
     x_b = ObjectProperty(0)
-    y_b = NumericProperty(10)
+    y_b = NumericProperty(0)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.s = [10, 10]
         with self.canvas:
-            # Rectangle(pos=(0, 0), size=self.size)
             self.r = Rectangle(pos=(10, 10), size=self.s)
         self.velocity = [4, 2]
         self.velocity_b = [4, 2]
         Clock.schedule_interval(self.update, 1/60)
+        Clock.schedule_interval(self.update_b, 1/60)
 
     def update(self, dt):
         x, y = self.r.pos
@@ -100,7 +105,16 @@ class Ball(Widget):
         if y + self.s[0] > self.height or y < 0:
             self.velocity[1] *= -1
         self.r.pos = (x + self.velocity[0], y + self.velocity[1])
-    # pass
+
+    def update_b(self, dt):
+        print(f'self.x_b + 100: {self.x_b + 100}, self.width: {self.width}')
+        if self.x_b  > self.width or self.x_b < 0:
+            self.velocity_b[0] *= -1
+        if self.y_b > self.height or self.y_b < 0:
+            self.velocity_b[1] *= -1
+        self.x_b += self.velocity_b[0]
+        self.y_b += self.velocity_b[1]
+        print(self.velocity_b[0])
 
 
 class Screen1(Screen):
